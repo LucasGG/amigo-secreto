@@ -26,7 +26,7 @@ services:
   box:
     image: busybox
     volumes:
-      - box:/box
+      - /box
 
   app:
     tty: true
@@ -36,6 +36,7 @@ services:
       POSTGRES_HOST: db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+      REDIS_SERVER: redis://redis:6379/0
     ports:
       - target: 3000
         published: 3000
@@ -46,7 +47,6 @@ services:
       - type: volume
         source: gem-cache
         target: /usr/local/bundle
-      - box
     depends_on:
       - db
       - redis
@@ -58,8 +58,9 @@ services:
       POSTGRES_HOST: db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+      REDIS_SERVER: redis://redis:6379/0
     volumes:
-      - box
+      - .:/app
     depends_on:
       - db
       - redis

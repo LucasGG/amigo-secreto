@@ -10,7 +10,7 @@ end
 ruby '~> 2.7.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.0.1'
+gem 'rails', '~> 5.0'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.18'
@@ -43,7 +43,7 @@ gem 'jbuilder'
 gem 'redis', '~> 3.0'
 
 # Jobs
-gem 'sidekiq'
+gem 'sidekiq', require: 'sidekiq/web'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
