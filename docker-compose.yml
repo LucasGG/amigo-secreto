@@ -28,6 +28,12 @@ services:
     volumes:
       - /box
 
+  mailcatcher:
+    image: tophfr/mailcatcher
+    ports:
+      - 1025:25
+      - 1080:80
+
   app:
     tty: true
     stdin_open: true
