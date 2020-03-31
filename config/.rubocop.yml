@@ -1,0 +1,6 @@
+inherit_from: ../.rubocop.yml
+
+# Rails environments configuration can be giant.
+Metrics/BlockLength:
+  Exclude:
+    - 'environments/**/*'

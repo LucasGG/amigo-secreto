@@ -1,8 +1,11 @@
 version: "3.7"
 
 services:
-  postgres:
+  db:
     image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     volumes:
       - type: volume
         source: postgres-cache
@@ -29,6 +32,10 @@ services:
     tty: true
     stdin_open: true
     build: .
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
       - target: 3000
         published: 3000
@@ -41,16 +48,20 @@ services:
         target: /usr/local/bundle
       - box
     depends_on:
-      - postgres
+      - db
       - redis
 
   jobs:
     build: .
     command: ["./jobs-init.sh"]
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     volumes:
       - box
     depends_on:
-      - postgres
+      - db
       - redis
       - app
 

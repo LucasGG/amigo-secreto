@@ -1,0 +1,18 @@
+inherit_from: ../.rubocop.yml
+
+# Rails use blocks and specific methods/nomenclature to do migrations, we want
+# to enforce the standards.
+Metrics/MethodLength:
+  Exclude:
+    - 'migrate/**/*'
+
+# Migrations simply create the planned databases, we dont need obligatory
+# documentation because documentation is already in app/models.
+Style/Documentation:
+  Exclude:
+    - 'migrate/**/*'
+
+# Exclude useless assignment from seeds to not need to create variables after.
+Lint/UselessAssignment:
+  Exclude:
+    - 'seeds.rb'
