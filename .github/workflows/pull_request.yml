@@ -1,0 +1,108 @@
+name: Pull Request
+
+on:
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  rspec:
+    name: rspec
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Load bundler cache
+      id: gem-cache
+      uses: actions/cache@v1
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-gem-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-gem-
+
+    - name: Set up machine (phase 1)
+      if: steps.gem-cache.outputs.cache-hit != 'true'
+      run: |
+        sudo apt-get update
+        sudo apt-get install --quiet --yes --no-install-recommends \
+          build-essential git postgresql-server-dev-all
+
+    - name: Set up machine (phase 2)
+      run: |
+        sudo apt-get install --quiet --yes --no-install-recommends \
+          postgresql
+
+    - name: Set up ruby
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: 2.7.x
+
+    - name: Set up dependencies
+      run: |
+        bundle config set deployment 'true'
+        bundle install -j4 --retry 3
+
+    - name: Configure PostgreSQL
+      run: |
+        sudo -u postgres psql --command "alter user postgres password 'postgres'"
+
+    - name: Set up database
+      env:
+        DATABASE_PASSWORD: postgres
+        RAILS_ENV: test
+      run: |
+        bin/rails db:create
+        bin/rails db:schema:load
+
+    - name: Test
+      env:
+        DATABASE_PASSWORD: postgres
+        RACK_ENV: test
+      run: |
+        bin/rspec --fail-fast --format progress
+
+  rubocop:
+    name: rubocop
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - run: |
+        git fetch --no-tags --prune --depth=1 \
+          origin +refs/heads/*:refs/remotes/origin/*
+
+    - name: Load bundler cache
+      id: gem-cache
+      uses: actions/cache@v1
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-gem-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-gem-
+
+    - name: Set up machine
+      if: steps.gem-cache.outputs.cache-hit != 'true'
+      run: |
+        sudo apt-get update
+        sudo apt-get install --quiet --yes --no-install-recommends \
+          build-essential git libpq-dev
+
+    - name: Set up ruby
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: 2.7.x
+
+    - name: Set up dependencies
+      run: |
+        bundle config set deployment 'true'
+        bundle install -j4 --retry 3
+
+    - name: Lint
+      run: >-
+        bin/rubocop --force-exclusion
+        $(git diff --name-status origin/${{ github.base_ref }} |
+        grep -v -e '^[DUR]' | sed "s/^[a-zA-Z]*[^a-zA-Z0-9]*//")
