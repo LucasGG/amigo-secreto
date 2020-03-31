@@ -1,0 +1,61 @@
+version: "3.7"
+
+services:
+  postgres:
+    image: postgres
+    volumes:
+      - type: volume
+        source: postgres-cache
+        target: /var/lib/postgresql/data
+
+  redis:
+    image: redis
+    ports:
+      - target: 6379
+        published: 6379
+        protocol: tcp
+        mode: host
+    volumes:
+      - type: volume
+        source: redis-cache
+        target: /var/lib/redis/data
+
+  box:
+    image: busybox
+    volumes:
+      - box:/box
+
+  app:
+    tty: true
+    stdin_open: true
+    build: .
+    ports:
+      - target: 3000
+        published: 3000
+        protocol: tcp
+        mode: host
+    volumes:
+      - .:/app
+      - type: volume
+        source: gem-cache
+        target: /usr/local/bundle
+      - box
+    depends_on:
+      - postgres
+      - redis
+
+  jobs:
+    build: .
+    command: ["./jobs-init.sh"]
+    volumes:
+      - box
+    depends_on:
+      - postgres
+      - redis
+      - app
+
+volumes:
+  postgres-cache:
+  redis-cache:
+  gem-cache:
+  box:
