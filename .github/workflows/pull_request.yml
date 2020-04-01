@@ -38,7 +38,7 @@ jobs:
     - name: Set up ruby
       uses: actions/setup-ruby@v1
       with:
-        ruby-version: 2.7.x
+        ruby-version: 2.6.x
 
     - name: Set up dependencies
       run: |
@@ -94,7 +94,7 @@ jobs:
     - name: Set up ruby
       uses: actions/setup-ruby@v1
       with:
-        ruby-version: 2.7.x
+        ruby-version: 2.6.x
 
     - name: Set up dependencies
       run: |

@@ -1,4 +1,4 @@
-FROM ruby:2.7-slim
+FROM ruby:2.6-slim
 
 RUN apt-get update && \
     apt-get install --quiet --yes --no-install-recommends \
