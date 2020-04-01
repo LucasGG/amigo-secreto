@@ -6,6 +6,4 @@ then
   export RACK_ENV=development
 fi
 
-bundle check || bundle install -j4 --retry 3
-
 bin/sidekiq -q emails

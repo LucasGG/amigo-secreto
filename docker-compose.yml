@@ -1,11 +1,10 @@
 version: "3.7"
 
 services:
-  db:
+  postgres:
     image: postgres
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_HOST_AUTH_METHOD: trust
     volumes:
       - type: volume
         source: postgres-cache
@@ -31,17 +30,21 @@ services:
   mailcatcher:
     image: tophfr/mailcatcher
     ports:
-      - 1025:25
-      - 1080:80
+      - target: 1025
+        published: 25
+        protocol: tcp
+        mode: host
+      - target: 1080
+        published: 80
+        protocol: tcp
+        mode: host
 
   app:
     tty: true
     stdin_open: true
     build: .
     environment:
-      POSTGRES_HOST: db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_HOST: postgres
       REDIS_SERVER: redis://redis:6379/0
     ports:
       - target: 3000
@@ -54,21 +57,19 @@ services:
         source: gem-cache
         target: /usr/local/bundle
     depends_on:
-      - db
+      - postgres
       - redis
 
   jobs:
     build: .
     command: ["./jobs-init.sh"]
     environment:
-      POSTGRES_HOST: db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_HOST: postgres
       REDIS_SERVER: redis://redis:6379/0
     volumes:
       - .:/app
     depends_on:
-      - db
+      - postgres
       - redis
       - app
 
