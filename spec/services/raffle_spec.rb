@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Raffle do
@@ -6,24 +8,22 @@ RSpec.describe Raffle do
   let(:campaign) { create(:campaign, status: :pending) }
 
   describe '#call' do
-    context "when has more then two members" do
-      before do
-        campaign.members = build_list(:member, 3)
-      end
+    context 'when has more then two members' do
+      before { campaign.members = build_list(:member, 3) }
 
       let(:results) { service.call(campaign: campaign) }
 
-      it "results is a hash" do
+      it 'results is a hash' do
         expect(results.class).to eq(Hash)
       end
 
-      it "all members are in results as a member" do
-        result_members = results.map {|r| r.first}
+      it 'all members are in results as a member' do
+        result_members = results.map(&:first)
         expect(result_members.sort).to eq(campaign.members.sort)
       end
 
-      it "all member are in results as a friend" do
-        result_friends = results.map {|r| r.last}
+      it 'all member are in results as a friend' do
+        result_friends = results.map(&:last)
         expect(result_friends.sort).to eq(campaign.members.sort)
       end
 
@@ -37,14 +37,12 @@ RSpec.describe Raffle do
     end
 
     context "when don't has more then two members" do
-      before do
-        campaign.members = build_list(:member, 1)
-      end
+      before { campaign.members = build_list(:member, 1) }
 
       let(:response) { service.call(campaign: campaign) }
 
-      it "raise error" do
-        expect(response).to eql(false)
+      it 'raise error' do
+        expect(response).to be(false)
       end
     end
   end
