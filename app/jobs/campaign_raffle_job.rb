@@ -1,7 +1,7 @@
 class CampaignRaffleJob < ApplicationJob
   queue_as :emails
 
-  def perform(*args)
+  def perform(campaign)
     friend_relations = Raffle.call(campaign: campaign)
 
     if friend_relations
