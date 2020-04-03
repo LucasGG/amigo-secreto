@@ -49,6 +49,10 @@ gem 'devise'
 gem 'material_icons'
 gem 'materialize-sass'
 
+# Mail
+gem 'inky-rb', require: 'inky'
+gem 'premailer-rails'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
