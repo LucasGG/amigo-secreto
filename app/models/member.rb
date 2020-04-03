@@ -3,6 +3,8 @@ class Member < ApplicationRecord
 
   after_save :set_campaign_pending
 
+  after_destroy :set_campaign_pending
+
   validates :name, :email, :campaign, presence: true
 
   def set_pixel
