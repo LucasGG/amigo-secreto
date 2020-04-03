@@ -13,5 +13,5 @@ Rails.application.routes.draw do
 
   resources :members, only: [:create, :destroy, :update]
 
-  mount Sidekiq::Web => '/sidekiq'
+  mount Sidekiq::Web => '/sidekiq' unless Rails.env.production?
 end
