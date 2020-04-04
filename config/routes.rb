@@ -11,7 +11,7 @@ Rails.application.routes.draw do
 
   get 'members/:token/opened', to: 'members#opened'
 
-  resources :members, only: [:create, :destroy, :update]
+  resources :members, only: %i[create destroy update]
 
   mount Sidekiq::Web => '/sidekiq' unless Rails.env.production?
 end

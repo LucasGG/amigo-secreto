@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CampaignRaffleJob < ApplicationJob
   queue_as :emails
 
@@ -14,7 +16,7 @@ class CampaignRaffleJob < ApplicationJob
 
       campaign.update(status: :finished)
     else
-       # Send mail to owner of campaign (desafio)
+      # Send mail to owner of campaign (desafio)
     end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Raffle < ApplicationService
   def initialize(campaign:)
     @campaign = campaign

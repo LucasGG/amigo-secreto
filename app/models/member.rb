@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Member < ApplicationRecord
   belongs_to :campaign
 
@@ -13,12 +15,12 @@ class Member < ApplicationRecord
       random_token = SecureRandom.urlsafe_base64(nil, false)
       break random_token unless Member.exists?(token: random_token)
     end
-    self.save!
+    save!
   end
 
   protected
 
   def set_campaign_pending
-    self.campaign.update(status: :pending)
+    campaign.update(status: :pending)
   end
 end

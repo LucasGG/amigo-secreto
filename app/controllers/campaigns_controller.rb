@@ -1,11 +1,12 @@
+# frozen_string_literal: true
+
 class CampaignsController < ApplicationController
   before_action :authenticate_user!
 
-  before_action :set_campaign, only: [:show, :destroy, :update, :raffle]
-  before_action :is_owner?, only: [:show, :destroy, :update, :raffle]
+  before_action :set_campaign, only: %i[show destroy update raffle]
+  before_action :is_owner?, only: %i[show destroy update raffle]
 
-  def show
-  end
+  def show; end
 
   def index
     @campaigns = current_user.campaigns
@@ -46,13 +47,13 @@ class CampaignsController < ApplicationController
 
   def raffle
     respond_to do |format|
-      if @campaign.status != "pending"
+      if @campaign.status != 'pending'
         format.json { render json: 'Já foi sorteada', status: :unprocessable_entity }
       elsif @campaign.members.count < 3
-        format.json {
+        format.json do
           render json: 'A campanha precisa de pelo menos 3 pessoas',
                  status: :unprocessable_entity
-        }
+        end
       else
         CampaignRaffleJob.perform_later @campaign
         format.json { render json: true }
