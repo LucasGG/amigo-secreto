@@ -3,16 +3,15 @@ default: &default
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   host: <%= ENV.fetch('POSTGRES_HOST') %>
+  user: <%= ENV.fetch('POSTGRES_USER') { 'postgres' } %>
 
 development:
   <<: *default
   database: amigo_secreto_development
-  user: <%= ENV.fetch('POSTGRES_USER') { 'postgres' } %>
 
 test:
   <<: *default
   database: amigo_secreto_test
-  user: <%= ENV.fetch('POSTGRES_USER') { 'postgres' } %>
 
 production:
   <<: *default

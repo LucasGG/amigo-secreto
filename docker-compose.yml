@@ -22,11 +22,6 @@ services:
         source: redis-cache
         target: /var/lib/redis/data
 
-  box:
-    image: busybox
-    volumes:
-      - /box
-
   mailcatcher:
     image: tophfr/mailcatcher
     ports:
@@ -77,4 +72,3 @@ volumes:
   postgres-cache:
   redis-cache:
   gem-cache:
-  box:

@@ -22,11 +22,6 @@ services:
         source: redis-cache
         target: /var/lib/redis/data
 
-  box:
-    image: busybox
-    volumes:
-      - /box
-
   app:
     tty: true
     stdin_open: true
@@ -47,6 +42,15 @@ services:
       - postgres
       - redis
 
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile-nginx
+    links:
+      - app
+    ports:
+      - "80:80"
+
   jobs:
     build: .
     env_file:
@@ -62,4 +66,4 @@ services:
 volumes:
   postgres-cache:
   redis-cache:
-  box:
+  gem-cache:
