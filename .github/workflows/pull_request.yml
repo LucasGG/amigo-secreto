@@ -28,7 +28,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install --quiet --yes --no-install-recommends \
-          build-essential git postgresql-server-dev-all
+          build-essential git libpq-dev
 
     - name: Set up machine (phase 2)
       run: |
@@ -42,16 +42,19 @@ jobs:
 
     - name: Set up dependencies
       run: |
-        bundle config set deployment 'true'
+        gem install bundler -v 2.1.4
         bundle install -j4 --retry 3
 
-    - name: Configure PostgreSQL
-      run: |
-        sudo -u postgres psql --command "alter user postgres password 'postgres'"
+    - name: Configure database
+      run: >-
+        sudo -u postgres psql --command \
+          "alter user postgres password 'postgres'"
 
     - name: Set up database
       env:
-        DATABASE_PASSWORD: postgres
+        POSTGRES_HOST: localhost
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_USER: postgres
         RAILS_ENV: test
       run: |
         bin/rails db:create
@@ -59,10 +62,11 @@ jobs:
 
     - name: Test
       env:
-        DATABASE_PASSWORD: postgres
-        RACK_ENV: test
-      run: |
-        bin/rspec --fail-fast --format progress
+        POSTGRES_HOST: localhost
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_USER: postgres
+        RAILS_ENV: test
+      run: bin/rspec --fail-fast --format progress
 
   rubocop:
     name: rubocop
@@ -98,11 +102,11 @@ jobs:
 
     - name: Set up dependencies
       run: |
-        bundle config set deployment 'true'
+        gem install bundler -v 2.1.4
         bundle install -j4 --retry 3
 
     - name: Lint
       run: >-
         bin/rubocop --force-exclusion
-        $(git diff --name-status origin/${{ github.base_ref }} |
-        grep -v -e '^[DUR]' | sed "s/^[a-zA-Z]*[^a-zA-Z0-9]*//")
+          $(git diff --name-status origin/${{ github.base_ref }} |
+          grep -v -e '^[DUR]' | sed "s/^[a-zA-Z]*[^a-zA-Z0-9]*//")
