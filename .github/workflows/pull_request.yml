@@ -41,11 +41,14 @@ jobs:
         ruby-version: 2.6.x
 
     - name: Set up dependencies
-      run: bundle install -j4 --retry 3
+      run: |
+        gem install bundler -v 2.1.4
+        bundle install -j4 --retry 3
 
     - name: Configure PostgreSQL
-      run: |
-        sudo -u postgres psql --command "alter user postgres password 'postgres'"
+      run: >-
+        sudo -u postgres psql --command \
+          "alter user postgres password 'postgres'"
 
     - name: Set up database
       env:
@@ -94,10 +97,12 @@ jobs:
         ruby-version: 2.6.x
 
     - name: Set up dependencies
-      run: bundle install -j4 --retry 3
+      run: |
+        gem install bundler -v 2.1.4
+        bundle install -j4 --retry 3
 
     - name: Lint
       run: >-
         bin/rubocop --force-exclusion
-        $(git diff --name-status origin/${{ github.base_ref }} |
-        grep -v -e '^[DUR]' | sed "s/^[a-zA-Z]*[^a-zA-Z0-9]*//")
+          $(git diff --name-status origin/${{ github.base_ref }} |
+          grep -v -e '^[DUR]' | sed "s/^[a-zA-Z]*[^a-zA-Z0-9]*//")

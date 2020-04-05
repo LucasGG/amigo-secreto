@@ -283,7 +283,7 @@ DEPENDENCIES
   spring-watcher-listen
   turbolinks
   uglifier
-  web-console (>= 3.3.0)
+  web-console
 
 RUBY VERSION
    ruby 2.6.6p146
