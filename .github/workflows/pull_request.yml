@@ -41,9 +41,7 @@ jobs:
         ruby-version: 2.6.x
 
     - name: Set up dependencies
-      run: |
-        bundle config set deployment 'true'
-        bundle install -j4 --retry 3
+      run: bundle install -j4 --retry 3
 
     - name: Configure PostgreSQL
       run: |
@@ -61,8 +59,7 @@ jobs:
       env:
         DATABASE_PASSWORD: postgres
         RACK_ENV: test
-      run: |
-        bin/rspec --fail-fast --format progress
+      run: bin/rspec --fail-fast --format progress
 
   rubocop:
     name: rubocop
@@ -97,9 +94,7 @@ jobs:
         ruby-version: 2.6.x
 
     - name: Set up dependencies
-      run: |
-        bundle config set deployment 'true'
-        bundle install -j4 --retry 3
+      run: bundle install -j4 --retry 3
 
     - name: Lint
       run: >-
