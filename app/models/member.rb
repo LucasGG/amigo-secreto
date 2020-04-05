@@ -18,6 +18,8 @@ class Member < ApplicationRecord
     save!
   end
 
+  scope :opened, -> { where(open: true) }
+
   protected
 
   def set_campaign_pending
