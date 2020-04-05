@@ -3,4 +3,4 @@ set -e
 
 if [ -z "${RACK_ENV}" ]; then export RACK_ENV=development; fi
 
-bin/puma -C config/puma.rb
+bin/rails server puma --binding=0.0.0.0
