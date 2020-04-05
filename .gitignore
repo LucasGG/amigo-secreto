@@ -13,3 +13,6 @@
 # Ignore environment files.
 /.env*
 !/.env.example
+
+# Ignore rspec examples file.
+/spec/examples

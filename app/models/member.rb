@@ -3,9 +3,8 @@
 class Member < ApplicationRecord
   belongs_to :campaign
 
-  after_save :set_campaign_pending
-
-  after_destroy :set_campaign_pending
+  after_save -> { campaign.pending! }
+  after_destroy -> { campaign.pending! }
 
   validates :name, :email, :campaign, presence: true
 
@@ -18,9 +17,5 @@ class Member < ApplicationRecord
     save!
   end
 
-  protected
-
-  def set_campaign_pending
-    campaign.update(status: :pending)
-  end
+  scope :opened, -> { where(open: true) }
 end

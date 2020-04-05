@@ -4,7 +4,7 @@ class CampaignsController < ApplicationController
   before_action :authenticate_user!
 
   before_action :set_campaign, only: %i[show destroy update raffle]
-  before_action :is_owner?, only: %i[show destroy update raffle]
+  before_action :owner?, only: %i[show destroy update raffle]
 
   def show; end
 
@@ -73,7 +73,7 @@ class CampaignsController < ApplicationController
           .merge(user: current_user)
   end
 
-  def is_owner?
+  def owner?
     unless current_user == @campaign.user
       respond_to do |format|
         format.json { render json: false, status: :forbidden }
