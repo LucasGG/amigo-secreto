@@ -8,8 +8,6 @@ git_source(:github) do |repo_name|
 end
 
 ruby '~> 2.6.0'
-
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.0'
 
 # Use postgresql as the database for Active Record
@@ -30,10 +28,10 @@ gem 'coffee-rails'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 
-# Turbolinks makes navigating your web application faster.
+# Turbolinks makes navigating your web application faster
 gem 'turbolinks'
 
-# Build JSON APIs with ease.
+# Build JSON APIs with ease
 gem 'jbuilder'
 
 # Use Redis adapter to run Action Cable in production
@@ -42,7 +40,7 @@ gem 'redis'
 # Jobs
 gem 'sidekiq', require: 'sidekiq/web'
 
-# Authentication/user framework.
+# Authentication framework
 gem 'devise'
 
 # UI
@@ -54,25 +52,24 @@ gem 'inky-rb', require: 'inky'
 gem 'premailer-rails'
 
 group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger
-  # console.
+  # Call 'byebug' anywhere in the code to get a debugger console
   gem 'byebug', platform: :mri
 
-  # WARNING: Need to be in dev/test group because rake tasks.
-  # Test framework.
+  # WARNING: Need to be in dev/test group because rake tasks
+  # Test framework
   gem 'rspec-rails'
 end
 
 group :development do
   # Access an IRB console on exception pages or by using
-  # <%= console %> anywhere in the code.
-  gem 'listen', '~> 3.0.5'
+  # <%= console %> anywhere in the code
+  gem 'listen'
   gem 'web-console', '>= 3.3.0'
 
   # Spring speeds up development by keeping your application running
-  # in the background. Read more: https://github.com/rails/spring
+  # in the background
   gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'spring-watcher-listen'
 
   # Cops
   gem 'rubocop-performance', require: false
@@ -81,7 +78,7 @@ group :development do
 end
 
 group :test do
-  # Test auxiliary libs.
+  # Test auxiliary libs
   gem 'factory_bot_rails'
   gem 'faker'
 end
