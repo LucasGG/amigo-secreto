@@ -52,6 +52,7 @@ jobs:
 
     - name: Set up database
       env:
+        DATABASE_HOST: postgres
         DATABASE_PASSWORD: postgres
         RAILS_ENV: test
       run: |
@@ -60,6 +61,7 @@ jobs:
 
     - name: Test
       env:
+        DATABASE_HOST: postgres
         DATABASE_PASSWORD: postgres
         RACK_ENV: test
       run: bin/rspec --fail-fast --format progress
