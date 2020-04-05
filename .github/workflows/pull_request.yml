@@ -28,7 +28,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install --quiet --yes --no-install-recommends \
-          build-essential git postgresql-server-dev-all
+          build-essential git libpq-dev
 
     - name: Set up machine (phase 2)
       run: |
