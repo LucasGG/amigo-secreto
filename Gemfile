@@ -17,6 +17,15 @@ gem 'pg'
 # Use Puma as the app server
 gem 'puma'
 
+# Use Redis adapter to run Action Cable in production
+gem 'redis'
+
+# Jobs
+gem 'sidekiq', require: 'sidekiq/web'
+
+# Build JSON APIs with ease
+gem 'jbuilder'
+
 # Use SCSS for stylesheets
 gem 'sassc-rails'
 
@@ -32,18 +41,6 @@ gem 'jquery-rails'
 # Turbolinks makes navigating your web application faster
 gem 'turbolinks'
 
-# Build JSON APIs with ease
-gem 'jbuilder'
-
-# Use Redis adapter to run Action Cable in production
-gem 'redis'
-
-# Jobs
-gem 'sidekiq', require: 'sidekiq/web'
-
-# Authentication framework
-gem 'devise'
-
 # UI
 gem 'material_icons'
 gem 'materialize-sass'
@@ -52,10 +49,12 @@ gem 'materialize-sass'
 gem 'inky-rb', require: 'inky'
 gem 'premailer-rails'
 
+# Authentication framework
+gem 'devise'
+
 group :development, :test do
   gem 'byebug', platform: :mri
 
-  # WARNING: Need to be in dev/test group because rake tasks
   # Test framework
   gem 'rspec-rails'
 
