@@ -6,4 +6,4 @@ test:
 
 production:
   adapter: redis
-  url: redis://localhost:6379/1
+  url: <%= URI.join(ENV.fetch('REDIS_URL'), '/1').to_s %>
