@@ -50,18 +50,18 @@ jobs:
 
     - name: Set up database
       env:
-        POSTGRES_HOST: localhost
-        POSTGRES_USER: postgres
-        POSTGRES_PASSWORD: postgres
+        POSTGRESQL_HOST: localhost
+        POSTGRESQL_USER: postgres
+        POSTGRESQL_PASSWORD: postgres
       run: |
         bin/rails db:create
         bin/rails db:schema:load
 
     - name: Test
       env:
-        POSTGRES_HOST: localhost
-        POSTGRES_USER: postgres
-        POSTGRES_PASSWORD: postgres
+        POSTGRESQL_HOST: localhost
+        POSTGRESQL_USER: postgres
+        POSTGRESQL_PASSWORD: postgres
       run: bin/rspec --fail-fast --format progress
 
   rubocop:
