@@ -8,14 +8,15 @@ RUN apt-get update && \
       nodejs \
     && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /app
 WORKDIR /app
 
 COPY Gemfile* ./
-RUN gem install bundler -v 2.1.4
-RUN bundle install -j4 --retry 3
+
+RUN gem update --system && \
+    gem install bundler -v 2.1.4 --no-document && \
+    bundle install --jobs=4 --retry 3
 
 COPY . .
 
-ENTRYPOINT ["./app-entrypoint.sh"]
-CMD ["./app-init.sh"]
+ENTRYPOINT ["./docker-app-entrypoint.sh"]
+CMD ["./docker-app-init.sh"]
