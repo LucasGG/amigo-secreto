@@ -8,6 +8,7 @@ git_source(:github) do |repo_name|
 end
 
 ruby '~> 2.6.0'
+
 gem 'rails', '~> 5.2'
 
 # Use postgresql as the database for Active Record
@@ -15,6 +16,15 @@ gem 'pg'
 
 # Use Puma as the app server
 gem 'puma'
+
+# Use Redis adapter to run Action Cable in production
+gem 'redis'
+
+# Jobs
+gem 'sidekiq', require: 'sidekiq/web'
+
+# Build JSON APIs with ease
+gem 'jbuilder'
 
 # Use SCSS for stylesheets
 gem 'sassc-rails'
@@ -31,18 +41,6 @@ gem 'jquery-rails'
 # Turbolinks makes navigating your web application faster
 gem 'turbolinks'
 
-# Build JSON APIs with ease
-gem 'jbuilder'
-
-# Use Redis adapter to run Action Cable in production
-gem 'redis'
-
-# Jobs
-gem 'sidekiq', require: 'sidekiq/web'
-
-# Authentication framework
-gem 'devise'
-
 # UI
 gem 'material_icons'
 gem 'materialize-sass'
@@ -51,23 +49,27 @@ gem 'materialize-sass'
 gem 'inky-rb', require: 'inky'
 gem 'premailer-rails'
 
+# Authentication framework
+gem 'devise'
+
 group :development, :test do
-  # Call 'byebug' anywhere in the code to get a debugger console
   gem 'byebug', platform: :mri
 
-  # WARNING: Need to be in dev/test group because rake tasks
   # Test framework
   gem 'rspec-rails'
+
+  # Development/test auxiliary libs
+  gem 'factory_bot_rails'
+  gem 'faker'
 end
 
 group :development do
-  # Access an IRB console on exception pages or by using
-  # <%= console %> anywhere in the code
   gem 'listen'
+
+  # Access an IRB console on exception pages or by using <%= console %> anywhere in the code
   gem 'web-console'
 
-  # Spring speeds up development by keeping your application running
-  # in the background
+  # Spring speeds up development by keeping your application running in the background
   gem 'spring'
   gem 'spring-watcher-listen'
 
@@ -75,10 +77,4 @@ group :development do
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
   gem 'rubocop-rspec', require: false
-end
-
-group :test do
-  # Test auxiliary libs
-  gem 'factory_bot_rails'
-  gem 'faker'
 end

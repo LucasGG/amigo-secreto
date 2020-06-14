@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
-
 RSpec.describe CampaignMailer, type: :mailer do
   describe 'raffle' do
     before do
