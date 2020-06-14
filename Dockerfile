@@ -18,5 +18,7 @@ RUN gem update --system && \
 
 COPY . .
 
+EXPORT 3000
+
 ENTRYPOINT ["./docker-app-entrypoint.sh"]
 CMD ["./docker-app-init.sh"]
