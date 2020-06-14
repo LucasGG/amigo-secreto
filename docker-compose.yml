@@ -56,6 +56,9 @@ services:
       - docker-app.env
     volumes:
       - .:/app:delegated
+      - type: volume
+        source: gem-cache
+        target: /usr/local/bundle
     depends_on:
       - postgres
       - redis
