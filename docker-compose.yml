@@ -9,6 +9,8 @@ services:
       - type: volume
         source: postgres-cache
         target: /var/lib/postgresql/data
+    logging:
+      driver: none
 
   redis:
     image: redis
@@ -16,6 +18,8 @@ services:
       - type: volume
         source: redis-cache
         target: /var/lib/redis/data
+    logging:
+      driver: none
 
   mailcatcher:
     build: ./.docker/mailcatcher
