@@ -5,10 +5,27 @@ on:
     branches:
     - master
 
+env:
+  RAILS_ENV: test
+
 jobs:
   rspec:
     name: rspec
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:alpine
+        env:
+          POSTGRES_PASSWORD: postgres
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
 
     steps:
     - name: Checkout code
@@ -16,24 +33,10 @@ jobs:
 
     - name: Load bundler cache
       id: gem-cache
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       with:
         path: vendor/bundle
         key: ${{ runner.os }}-gem-${{ hashFiles('**/Gemfile.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-gem-
-
-    - name: Set up machine (phase 1)
-      if: steps.gem-cache.outputs.cache-hit != 'true'
-      run: |
-        sudo apt-get update
-        sudo apt-get install --quiet --yes --no-install-recommends \
-          build-essential git libpq-dev
-
-    - name: Set up machine (phase 2)
-      run: |
-        sudo apt-get install --quiet --yes --no-install-recommends \
-          postgresql
 
     - name: Set up ruby
       uses: actions/setup-ruby@v1
@@ -42,20 +45,14 @@ jobs:
 
     - name: Set up dependencies
       run: |
-        gem install bundler -v 2.1.4
-        bundle install -j4 --retry 3
-
-    - name: Configure database
-      run: >-
-        sudo -u postgres psql --command \
-          "alter user postgres password 'postgres'"
+        gem install bundler -v 2.1.4 --no-document
+        bundle install --jobs=4 --retry 3
 
     - name: Set up database
       env:
         POSTGRES_HOST: localhost
-        POSTGRES_PASSWORD: postgres
         POSTGRES_USER: postgres
-        RAILS_ENV: test
+        POSTGRES_PASSWORD: postgres
       run: |
         bin/rails db:create
         bin/rails db:schema:load
@@ -63,9 +60,8 @@ jobs:
     - name: Test
       env:
         POSTGRES_HOST: localhost
-        POSTGRES_PASSWORD: postgres
         POSTGRES_USER: postgres
-        RAILS_ENV: test
+        POSTGRES_PASSWORD: postgres
       run: bin/rspec --fail-fast --format progress
 
   rubocop:
@@ -81,19 +77,10 @@ jobs:
 
     - name: Load bundler cache
       id: gem-cache
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       with:
         path: vendor/bundle
         key: ${{ runner.os }}-gem-${{ hashFiles('**/Gemfile.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-gem-
-
-    - name: Set up machine
-      if: steps.gem-cache.outputs.cache-hit != 'true'
-      run: |
-        sudo apt-get update
-        sudo apt-get install --quiet --yes --no-install-recommends \
-          build-essential git libpq-dev
 
     - name: Set up ruby
       uses: actions/setup-ruby@v1
@@ -102,11 +89,11 @@ jobs:
 
     - name: Set up dependencies
       run: |
-        gem install bundler -v 2.1.4
-        bundle install -j4 --retry 3
+        gem install bundler -v 2.1.4 --no-document
+        bundle install --jobs=4 --retry 3
 
     - name: Lint
       run: >-
         bin/rubocop --force-exclusion
           $(git diff --name-status origin/${{ github.base_ref }} |
-          grep -v -e '^[DUR]' | sed "s/^[a-zA-Z]*[^a-zA-Z0-9]*//")
+          grep -v -e '^[DUR]' | sed "s/^[a-zA-Z]*[^a-zA-Z0-9\.]*//")
