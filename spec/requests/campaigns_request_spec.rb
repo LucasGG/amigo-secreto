@@ -50,7 +50,7 @@ RSpec.describe 'Campaigns', type: :request do
 
     it 'Redirect to new campaign' do
       expect(response).to have_http_status(:found)
-      expect(response).to redirect_to("/campaigns//{Campaign.last.id}")
+      expect(response).to redirect_to('/campaigns//{Campaign.last.id}')
     end
 
     it 'Create campaign with right attributes' do
@@ -67,10 +67,6 @@ RSpec.describe 'Campaigns', type: :request do
   end
 
   describe 'DELETE /destroy' do
-    before do
-      # request.env['HTTP_ACCEPT'] = 'application/json'
-    end
-
     context 'User is the Campaign Owner' do
       it 'returns http success' do
         campaign = create(:campaign, user: @current_user)
@@ -122,10 +118,6 @@ RSpec.describe 'Campaigns', type: :request do
   end
 
   describe 'GET /raffle' do
-    before do
-      # request.env['HTTP_ACCEPT'] = 'application/json'
-    end
-
     context 'User is the Campaign Owner' do
       before do
         @campaign = create(:campaign, user: @current_user)
