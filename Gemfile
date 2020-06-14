@@ -61,6 +61,9 @@ group :development, :test do
   # Development/test auxiliary libs
   gem 'factory_bot_rails'
   gem 'faker'
+
+  # Load environment files
+  gem 'dotenv-rails'
 end
 
 group :development do
